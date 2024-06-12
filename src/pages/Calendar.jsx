@@ -3,6 +3,8 @@ import React from 'react'
 const Calendar = () => {
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
+	const nowDate = new Date()
+	const monthName = nowDate.toLocaleString('default', { month: 'long' })
 	const generateCalendar = () => {
 		const rows = []
 		for (let i = 0; i < 6; i++) {
@@ -12,10 +14,11 @@ const Calendar = () => {
 				// 7 columns for 7 days of the week
 				cells.push(
 					<td
-						className='p-4 w-[calc(100%/7)]'
+						className='relative p-4 text-center text-4xl w-[calc(100%/7)] border'
 						key={j}
 					>
-						a
+						<span className='absolute text-sm right-2 top-2'>{i * 7 + j + 1}</span>
+						🔥
 					</td>
 				)
 			}
@@ -25,20 +28,24 @@ const Calendar = () => {
 	}
 	return (
 		<>
-			<div className='relative h-full flex flex-col justify-center items-center'>
-				<p className='absolute top-10 font-cursive text-5xl'>Calendar View</p>
-				<div className='max-w-[1260px] overflow-x-auto'>
-					<table className='w-full'>
-						<thead>
-							<tr>
-								{daysOfWeek.map((day, index) => (
-									<th key={index}>{day}</th>
-								))}
-							</tr>
-						</thead>
-						<tbody>{generateCalendar()}</tbody>
-					</table>
-				</div>
+			<div className='h-full flex flex-col items-center'>
+				<p className='font-cursive text-5xl my-10'>Calendar View</p>
+				<p className='text-2xl font-bold my-10'>{monthName}</p>
+				<table className='w-full'>
+					<thead>
+						<tr>
+							{daysOfWeek.map((day, index) => (
+								<th
+									className='font-bold text-2xl border'
+									key={index}
+								>
+									{day}
+								</th>
+							))}
+						</tr>
+					</thead>
+					<tbody>{generateCalendar()}</tbody>
+				</table>
 			</div>
 		</>
 	)

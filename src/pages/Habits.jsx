@@ -4,21 +4,21 @@ import Modal from 'react-modal'
 Modal.setAppElement('#root')
 
 const modalStyles = {
-	overlay: {
-		backgroundColor: 'rgba(0, 0, 0, 0.75)',
-	},
 	content: {
 		top: '50%',
 		left: '50%',
 		right: 'auto',
 		bottom: 'auto',
+		padding: '2rem',
+		color: '#f1f1f1',
+		minWidth: '400px',
 		maxWidth: '260px',
 		marginRight: '-50%',
-		padding: '2rem',
-		minWidth: '400px',
-		transform: 'translate(-50%, -50%)',
 		backgroundColor: '#353535',
-		color: '#f1f1f1',
+		transform: 'translate(-50%, -50%)',
+	},
+	overlay: {
+		backgroundColor: 'rgba(0, 0, 0, 0.75)',
 	},
 }
 
@@ -30,6 +30,7 @@ const Habit = () => {
 	const [newHabit, setNewHabit] = useState('')
 	const [addModalIsOpen, setAddModalIsOpen] = useState(false)
 	const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false)
+	const [confirmRemoveIsOpen, setConfirmRemoveIsOpen] = useState(false)
 
 	const addHabit = () => {
 		if (newHabit.length == 0) return
@@ -43,27 +44,16 @@ const Habit = () => {
 		const updatedHabits = habitList.filter((habit) => habit != habitToRemove)
 		setHabitList(updatedHabits)
 	}
-	function openAddModal() {
-		setAddModalIsOpen(true)
-	}
 
 	function closeAddModal() {
 		setAddModalIsOpen(false)
 		setNewHabit('')
 	}
 
-	function openRemoveModal() {
-		setRemoveModalIsOpen(true)
-	}
-
-	function closeRemoveModal() {
-		setRemoveModalIsOpen(false)
-	}
-
 	return (
 		<>
 			<div className='h-full flex flex-col items-center'>
-				<p className='font-cursive text-5xl mb-10'>Habit Tracker</p>
+				<p className='font-cursive text-5xl my-10'>Habit Tracker</p>
 				<div className='bg-white text-black mb-8 flex max-h-[35.25rem] overflow-y-auto scroll-y'>
 					<div className='container mx-auto p-2'>
 						<div className='grid grid-cols-8 border border-black'>
@@ -95,23 +85,25 @@ const Habit = () => {
 				</div>
 				<div className='flex gap-4'>
 					<button
-						onClick={openAddModal}
+						onClick={() => setAddModalIsOpen(true)}
 						className='bg-green-600 font-bold px-8 py-4 rounded-lg'
 					>
 						Add a new habit
 					</button>
 					<button
-						onClick={openRemoveModal}
+						onClick={() => setRemoveModalIsOpen(true)}
 						className='bg-red-600 font-bold px-8 py-4 rounded-lg'
 					>
 						Remove habit
 					</button>
 				</div>
+
+				{/* Modal to Add new Habit */}
 				<Modal
 					isOpen={addModalIsOpen}
 					onRequestClose={closeAddModal}
 					style={modalStyles}
-					contentLabel='Example Modal'
+					contentLabel='Add Habit Modal'
 				>
 					<label htmlFor='habit-field'>
 						<p className='text-xl text-center mb-4'>Add a Habit</p>
@@ -121,10 +113,10 @@ const Habit = () => {
 						type='text'
 						id='habit-field'
 						value={newHabit}
-						onChange={() => setNewHabit(event.target.value)}
+						onChange={(e) => setNewHabit(e.target.value)}
 						placeholder='New Habit'
 						autoComplete='off'
-						required
+						autoFocus
 					/>
 					<button
 						onClick={addHabit}
@@ -139,13 +131,16 @@ const Habit = () => {
 						Cancel
 					</button>
 				</Modal>
+
+				{/* Modal to Remove an existing Habit */}
 				<Modal
 					isOpen={removeModalIsOpen}
-					onRequestClose={closeRemoveModal}
+					onRequestClose={() => setRemoveModalIsOpen(false)}
 					style={modalStyles}
 					contentLabel='Example Modal'
 				>
-					<p className='text-xl text-center mb-4'>Stop Tracking a Habit</p>
+					<p className='text-xl text-center'>Stop Tracking a Habit</p>
+					<p className='text-sm text-center text-gray-500 font-light mb-4'>Click on a habit to stop tracking it.</p>
 					<div className='flex flex-wrap gap-4'>
 						{habitList.map((habits, index) => {
 							return (
@@ -161,9 +156,33 @@ const Habit = () => {
 					</div>
 					<button
 						className='bg-red-600 w-full p-2 mt-4'
-						onClick={closeRemoveModal}
+						onClick={() => setRemoveModalIsOpen(false)}
 					>
 						Cancel
+					</button>
+				</Modal>
+
+				{/* Remove Habit Confirmation */}
+
+				<Modal
+					isOpen={confirmRemoveIsOpen}
+					onRequestClose={() => setConfirmRemoveIsOpen(false)}
+					style={modalStyles}
+					contentLabel='Remove Modal'
+				>
+					<p className='text-center'>Confirm Removal</p>
+					<p className='text-xl text-center'>Stop Tracking {}</p>
+					<button
+						className='bg-red-600 w-full p-2 mt-4'
+						onClick={() => setConfirmRemoveIsOpen(false)}
+					>
+						Yes, Stop tracking
+					</button>
+					<button
+						className='bg-green-600 w-full p-2 mt-4'
+						onClick={() => setConfirmRemoveIsOpen(false)}
+					>
+						No, Keep tracking
 					</button>
 				</Modal>
 			</div>
