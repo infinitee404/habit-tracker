@@ -16,7 +16,8 @@ import { DateProvider } from './context/DateContext'
 import './App.css'
 
 const App = () => {
-	return (
+
+    return (
 		<>
 			<DateProvider>
 				<Router>

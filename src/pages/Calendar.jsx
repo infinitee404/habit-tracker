@@ -1,11 +1,12 @@
-import React, { useState, useContext } from 'react'
-import { BiChevronLeftSquare, BiChevronRightSquare } from 'react-icons/bi'
+import React, { useState, useContext, useEffect } from 'react'
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import { DateContext } from '../context/DateContext'
 
 const Calendar = () => {
 	const { nowDate } = useContext(DateContext)
 
 	const [month, setMonth] = useState(nowDate.getMonth())
+	const [year, setYear] = useState(nowDate.getFullYear())
 
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -14,13 +15,24 @@ const Calendar = () => {
 	const firstDayOfMonth = new Date(nowDate.getFullYear(), month, 1) // Get the first day of the month
 	const monthStartDay = firstDayOfMonth.getDay() // Get the day of the week for the first day of the month
 
-	const changeMonth = (value) => {
-		setMonth((prevMonth) => {
-			let newMonth = (prevMonth + value) % 12
-			if (newMonth < 0) return 11
-			return newMonth
-		})
+	const gotoToday = () => {
+		setMonth(nowDate.getMonth())
+		setYear(nowDate.getFullYear())
 	}
+
+	const changeMonth = (value) => {
+		setMonth((prevMonth) => prevMonth + value)
+	}
+
+	useEffect(() => {
+		if (month < 0) {
+			setMonth(11)
+			setYear((prevYear) => prevYear - 1)
+		} else if (month > 11) {
+			setMonth(0)
+			setYear((prevYear) => prevYear + 1)
+		}
+	}, [month])
 
 	const generateCalendar = () => {
 		const rows = []
@@ -39,7 +51,8 @@ const Calendar = () => {
 					>
 						<span className='absolute text-sm right-2 top-2'>
 							{isWithinMonth ? (
-								dayOfMonth === nowDate.getDate() && month === nowDate.getMonth() ? (
+								dayOfMonth === nowDate.getDate() && month === nowDate.getMonth() && year === nowDate.getFullYear() ? (
+									// To highlight current date
 									<span className='bg-blue-300 px-1 text-black rounded-xl '>{dayOfMonth}</span>
 								) : (
 									dayOfMonth
@@ -48,13 +61,12 @@ const Calendar = () => {
 								''
 							)}
 						</span>
-						{month < nowDate.getMonth()
-							? isWithinMonth && '🔥' // If the month is in the past, all days will have the fire emoji
-							: month > nowDate.getMonth()
-							? '' // If the month is in the future, no days will have the fire emoji
-							: // If the month is the current month, show fire emoji only for past days
-							isWithinMonth && dayOfMonth <= nowDate.getDate()
-							? '🔥'
+						{year < nowDate.getFullYear() || (year === nowDate.getFullYear() && month < nowDate.getMonth())
+							? isWithinMonth && '🔥' // If the date is in the past, all days will have the fire emoji
+							: year > nowDate.getFullYear() || (year === nowDate.getFullYear() && month > nowDate.getMonth())
+							? '' // If the date is in the future, no days will have the fire emoji
+							: isWithinMonth && dayOfMonth <= nowDate.getDate()
+							? '🔥' // If the month is the current month, show fire emoji only for past days
 							: ''}
 					</td>
 				)
@@ -69,13 +81,27 @@ const Calendar = () => {
 			<div className='h-full flex flex-col items-center'>
 				<p className='font-cursive text-5xl my-10'>Calendar View</p>
 
-				<p className='text-2xl font-bold my-10 flex items-center gap-4'>
-					<button onClick={() => changeMonth(-1)}>
-						<BiChevronLeftSquare />
+				<p className='relative w-full my-10 flex items-center justify-center gap-4 text-2xl font-bold'>
+					{(month !== nowDate.getMonth() || year !== nowDate.getFullYear()) && (
+						<button
+							onClick={() => gotoToday()}
+							className='bg-green-600 absolute h-full px-4 right-0 rounded-xl font-normal text-sm'
+						>
+							Go to Today
+						</button>
+					)}
+					<button
+						className='rounded h-full p-4'
+						onClick={() => changeMonth(-1)}
+					>
+						<BiChevronLeft />
 					</button>
-					{monthName}
-					<button onClick={() => changeMonth(1)}>
-						<BiChevronRightSquare />
+					{monthName}, {year}
+					<button
+						className='rounded h-full p-4'
+						onClick={() => changeMonth(1)}
+					>
+						<BiChevronRight />
 					</button>
 				</p>
 				<table className='w-full'>
