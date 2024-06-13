@@ -17,7 +17,7 @@ const App = () => {
 		<>
 			<Router>
 				<Navbar />
-				<div className='pt-[82px] h-screen max-w-[1260px]  mx-auto'>
+				<div className='pt-[82px] h-screen max-w-[1260px] mx-auto'>
 					<Routes>
 						<Route
 							path='/'

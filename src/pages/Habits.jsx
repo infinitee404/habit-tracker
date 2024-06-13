@@ -22,8 +22,8 @@ const modalStyles = {
 	},
 }
 
-const storedHabitList = localStorage.getItem('habit-list')
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const storedHabitList = localStorage.getItem('habit-list')
 
 const Habit = () => {
 	const [habitList, setHabitList] = useState(storedHabitList ? storedHabitList.split(',') : [])
@@ -43,6 +43,7 @@ const Habit = () => {
 		console.log('remove habit:', habitToRemove)
 		const updatedHabits = habitList.filter((habit) => habit != habitToRemove)
 		setHabitList(updatedHabits)
+		localStorage.setItem('habit-list', updatedHabits)
 	}
 
 	function closeAddModal() {
@@ -54,14 +55,14 @@ const Habit = () => {
 		<>
 			<div className='h-full flex flex-col items-center'>
 				<p className='font-cursive text-5xl my-10'>Habit Tracker</p>
-				<div className='bg-white text-black mb-8 flex max-h-[35.25rem] overflow-y-auto scroll-y'>
+				<div className='mb-8 flex max-h-[35.25rem] overflow-y-auto scroll-y'>
 					<div className='container mx-auto p-2'>
-						<div className='grid grid-cols-8 border border-black'>
+						<div className='grid grid-cols-8 border border-gray-600'>
 							{/* Header Row */}
-							<div className='font-bold border border-black p-2'>Habits</div>
+							<div className='font-bold border border-gray-600 p-2'>Habits</div>
 							{daysOfWeek.map((day, index) => (
 								<div
-									className='font-bold border border-black p-2'
+									className='font-bold border border-gray-600 p-2'
 									key={index}
 								>
 									{day}
@@ -71,10 +72,10 @@ const Habit = () => {
 							{/* Habit Rows */}
 							{habitList.map((habit, rowIndex) => (
 								<React.Fragment key={rowIndex}>
-									<div className='font-bold border border-black p-2'>{habit}</div>
+									<div className='font-bold border border-gray-600 p-2'>{habit}</div>
 									{daysOfWeek.map((_, colIndex) => (
 										<div
-											className='border border-black p-2'
+											className='border border-gray-600 p-2'
 											key={`${rowIndex}-${colIndex}`}
 										></div>
 									))}
