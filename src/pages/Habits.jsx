@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
+
+import AddHabitModal from '../components/AddHabitModal'
+import RemoveHabitModal from '../components/RemoveHabitModal'
 
 Modal.setAppElement('#root')
 
@@ -30,25 +33,17 @@ const Habit = () => {
 	const [newHabit, setNewHabit] = useState('')
 	const [addModalIsOpen, setAddModalIsOpen] = useState(false)
 	const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false)
-	const [confirmRemoveIsOpen, setConfirmRemoveIsOpen] = useState(false)
 
-	const addHabit = () => {
-		if (newHabit.length == 0) return
-		habitList.push(newHabit)
-		localStorage.setItem('habit-list', habitList)
-		closeAddModal()
-	}
-
-	const removeHabit = (habitToRemove) => {
-		console.log('remove habit:', habitToRemove)
-		const updatedHabits = habitList.filter((habit) => habit != habitToRemove)
+	const addHabit = (habit) => {
+		const updatedHabits = [...habitList, habit]
 		setHabitList(updatedHabits)
 		localStorage.setItem('habit-list', updatedHabits)
 	}
 
-	function closeAddModal() {
-		setAddModalIsOpen(false)
-		setNewHabit('')
+	const removeHabit = (habitToRemove) => {
+		const updatedHabits = habitList.filter((habit) => habit !== habitToRemove)
+		setHabitList(updatedHabits)
+		localStorage.setItem('habit-list', updatedHabits)
 	}
 
 	return (
@@ -102,93 +97,22 @@ const Habit = () => {
 					</button>
 				</div>
 
-				{/* Modal to Add new Habit */}
-				<Modal
+				<AddHabitModal
 					isOpen={addModalIsOpen}
-					onRequestClose={closeAddModal}
-					style={modalStyles}
-					contentLabel='Add Habit Modal'
-				>
-					<label htmlFor='habit-field'>
-						<p className='text-xl text-center mb-4'>Add a Habit</p>
-					</label>
-					<input
-						className='w-full p-2'
-						type='text'
-						id='habit-field'
-						value={newHabit}
-						onChange={(e) => setNewHabit(e.target.value)}
-						placeholder='New Habit'
-						autoComplete='off'
-						autoFocus
-					/>
-					<button
-						onClick={addHabit}
-						className='bg-green-600 w-full p-2 mt-4'
-					>
-						Add
-					</button>
-					<button
-						className='bg-red-600 w-full p-2 mt-4'
-						onClick={closeAddModal}
-					>
-						Cancel
-					</button>
-				</Modal>
+					onRequestClose={() => setAddModalIsOpen(false)}
+					onAddHabit={addHabit}
+					newHabit={newHabit}
+					setNewHabit={setNewHabit}
+					styles={modalStyles}
+				/>
 
-				{/* Modal to Remove an existing Habit */}
-				<Modal
+				<RemoveHabitModal
 					isOpen={removeModalIsOpen}
 					onRequestClose={() => setRemoveModalIsOpen(false)}
-					style={modalStyles}
-					contentLabel='Example Modal'
-				>
-					<p className='text-xl text-center'>Stop Tracking a Habit</p>
-					<p className='text-sm text-center text-gray-500 font-light mb-4'>Click on a habit to stop tracking it.</p>
-					<div className='flex flex-wrap gap-4'>
-						{habitList.map((habits, index) => {
-							return (
-								<button
-									className='bg-white p-2 text-black grow rounded'
-									key={index}
-									onClick={() => removeHabit(habits)}
-								>
-									{habits}
-								</button>
-							)
-						})}
-					</div>
-					<button
-						className='bg-red-600 w-full p-2 mt-4'
-						onClick={() => setRemoveModalIsOpen(false)}
-					>
-						Cancel
-					</button>
-				</Modal>
-
-				{/* Remove Habit Confirmation */}
-
-				<Modal
-					isOpen={confirmRemoveIsOpen}
-					onRequestClose={() => setConfirmRemoveIsOpen(false)}
-					style={modalStyles}
-					contentLabel='Remove Modal'
-				>
-					<p className='text-center'>Confirm Removal</p>
-					<p className='text-xl text-center'>Stop Tracking {}</p>
-					<button
-						className='bg-red-600 w-full p-2 mt-4'
-						onClick={() => setConfirmRemoveIsOpen(false)}
-					>
-						Yes, Stop tracking
-					</button>
-					<button
-						className='bg-green-600 w-full p-2 mt-4'
-						onClick={() => setConfirmRemoveIsOpen(false)}
-					>
-						No, Keep tracking
-					</button>
-				</Modal>
+					habitList={habitList}
+					onRemoveHabit={removeHabit}
+					styles={modalStyles}
+				/>
 			</div>
 		</>
 	)
