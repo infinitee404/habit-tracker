@@ -57,7 +57,10 @@ const Habit = () => {
 				<p className='font-cursive text-5xl my-10'>Habit Tracker</p>
 				<div className='mb-8 flex max-h-[35.25rem] overflow-y-auto scroll-y'>
 					<div className='container mx-auto p-2'>
-						<div className='grid grid-cols-8 border border-gray-600'>
+						<div
+							className='grid'
+							style={{ gridTemplateColumns: 'auto repeat(7, 4rem)' }}
+						>
 							{/* Header Row */}
 							<div className='font-bold border border-gray-600 p-2'>Habits</div>
 							{daysOfWeek.map((day, index) => (

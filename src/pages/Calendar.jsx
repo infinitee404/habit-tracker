@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { BiChevronLeftSquare, BiChevronRightSquare } from 'react-icons/bi'
+import { DateContext } from '../context/DateContext'
 
-const nowDate = new Date()
 const Calendar = () => {
+	const { nowDate } = useContext(DateContext)
+
 	const [month, setMonth] = useState(nowDate.getMonth())
 
 	const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
