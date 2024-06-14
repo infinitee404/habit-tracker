@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Modal from 'react-modal'
 
 import AddHabitModal from '../components/AddHabitModal'
 import RemoveHabitModal from '../components/RemoveHabitModal'
+
+import { DateContext } from '../context/DateContext'
 
 Modal.setAppElement('#root')
 
@@ -29,10 +31,13 @@ const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const storedHabitList = localStorage.getItem('habit-list')
 
 const Habit = () => {
+	const { nowDate } = useContext(DateContext)
+
 	const [habitList, setHabitList] = useState(storedHabitList ? storedHabitList.split(',') : [])
 	const [newHabit, setNewHabit] = useState('')
 	const [addModalIsOpen, setAddModalIsOpen] = useState(false)
 	const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false)
+	const today = daysOfWeek[nowDate.getDay()]
 
 	const addHabit = (habit) => {
 		const updatedHabits = [...habitList, habit]
@@ -62,27 +67,41 @@ const Habit = () => {
 						>
 							{/* Header Row */}
 							<div className='font-bold border border-gray-600 p-2'>Habits</div>
-							{daysOfWeek.map((day, index) => (
-								<div
-									className='font-bold border border-gray-600 p-2'
-									key={index}
-								>
-									{day}
-								</div>
-							))}
+							{daysOfWeek.map((day, index) =>
+								today !== day ? (
+									<div
+										className='border border-gray-600 p-2'
+										key={index}
+									>
+										{day}
+									</div>
+								) : (
+									<div
+										className='border border-gray-500 p-2 bg-blue-300 bg-opacity-30'
+										key={index}
+									>
+										{day}
+									</div>
+								)
+							)}
 
 							{/* Habit Rows */}
 							{habitList.map((habit, rowIndex) => (
 								<React.Fragment key={rowIndex}>
 									<div className='font-bold border border-gray-600 p-2'>{habit}</div>
-									{daysOfWeek.map((_, colIndex) => (
-										<div
-											className='border border-gray-600 p-2 flex justify-center'
-											key={`${rowIndex}-${colIndex}`}
-										>
-											A
-										</div>
-									))}
+									{daysOfWeek.map((_, colIndex) =>
+										colIndex === nowDate.getDay() ? (
+											<div
+												className='border border-gray-500 p-2 flex justify-center bg-blue-300 bg-opacity-20'
+												key={`${rowIndex}-${colIndex}`}
+											></div>
+										) : (
+											<div
+												className='border border-gray-600 p-2 flex justify-center'
+												key={`${rowIndex}-${colIndex}`}
+											></div>
+										)
+									)}
 								</React.Fragment>
 							))}
 						</div>
