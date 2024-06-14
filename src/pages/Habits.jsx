@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 
 import AddHabitModal from '../components/AddHabitModal'
@@ -38,12 +38,16 @@ const Habit = () => {
 		const updatedHabits = [...habitList, habit]
 		setHabitList(updatedHabits)
 		localStorage.setItem('habit-list', updatedHabits)
+		setNewHabit('')
 	}
 
 	const removeHabit = (habitToRemove) => {
 		const updatedHabits = habitList.filter((habit) => habit !== habitToRemove)
 		setHabitList(updatedHabits)
 		localStorage.setItem('habit-list', updatedHabits)
+		if (updatedHabits.length === 0) {
+			setRemoveModalIsOpen(false)
+		}
 	}
 
 	return (
@@ -73,9 +77,11 @@ const Habit = () => {
 									<div className='font-bold border border-gray-600 p-2'>{habit}</div>
 									{daysOfWeek.map((_, colIndex) => (
 										<div
-											className='border border-gray-600 p-2'
+											className='border border-gray-600 p-2 flex justify-center'
 											key={`${rowIndex}-${colIndex}`}
-										></div>
+										>
+											A
+										</div>
 									))}
 								</React.Fragment>
 							))}
