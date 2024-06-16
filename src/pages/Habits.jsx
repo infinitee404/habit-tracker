@@ -39,6 +39,9 @@ const Habit = () => {
 	const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false)
 	const today = daysOfWeek[nowDate.getDay()]
 
+	const done = '✔️'
+	const undone = '❌'
+
 	const addHabit = (habit) => {
 		const updatedHabits = [...habitList, habit]
 		setHabitList(updatedHabits)
@@ -55,6 +58,16 @@ const Habit = () => {
 		}
 	}
 
+	const updateCheck = (event, habitName, col) => {
+		if (daysOfWeek[col] === today) {
+			if (event.target.innerText.length === 0) {
+				event.target.innerText = done
+			} else {
+				event.target.innerText = ''
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className='h-full flex flex-col items-center'>
@@ -67,41 +80,30 @@ const Habit = () => {
 						>
 							{/* Header Row */}
 							<div className='font-bold border border-gray-600 p-2'>Habits</div>
-							{daysOfWeek.map((day, index) =>
-								today !== day ? (
-									<div
-										className='border border-gray-600 p-2'
-										key={index}
-									>
-										{day}
-									</div>
-								) : (
-									<div
-										className='border border-gray-500 p-2 bg-blue-300 bg-opacity-30'
-										key={index}
-									>
-										{day}
-									</div>
-								)
-							)}
+							{daysOfWeek.map((day, index) => (
+								<div
+									className={`border border-gray-600 p-2 ${today === day ? 'bg-blue-300 bg-opacity-30' : ''}`}
+									key={index}
+								>
+									{day}
+								</div>
+							))}
 
 							{/* Habit Rows */}
 							{habitList.map((habit, rowIndex) => (
 								<React.Fragment key={rowIndex}>
 									<div className='font-bold border border-gray-600 p-2'>{habit}</div>
-									{daysOfWeek.map((_, colIndex) =>
-										colIndex === nowDate.getDay() ? (
-											<div
-												className='border border-gray-500 p-2 flex justify-center bg-blue-300 bg-opacity-20'
-												key={`${rowIndex}-${colIndex}`}
-											></div>
-										) : (
-											<div
-												className='border border-gray-600 p-2 flex justify-center'
-												key={`${rowIndex}-${colIndex}`}
-											></div>
-										)
-									)}
+									{daysOfWeek.map((_, colIndex) => (
+										<div
+											onClick={(event) => updateCheck(event, habit, colIndex)}
+											className={`border border-gray-500 p-2 flex justify-center cursor-default select-none ${
+												colIndex === nowDate.getDay() && 'bg-blue-300 bg-opacity-20 hover:cursor-pointer'
+											} `}
+											key={`${rowIndex}-${colIndex}`}
+										>
+											{colIndex < nowDate.getDay() ? (Math.floor(Math.random() * 100) > 35 ? done : undone) : ''}
+										</div>
+									))}
 								</React.Fragment>
 							))}
 						</div>
