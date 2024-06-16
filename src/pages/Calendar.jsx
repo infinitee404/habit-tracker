@@ -12,7 +12,7 @@ const Calendar = () => {
 	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 	const monthName = months[month]
-	const firstDayOfMonth = new Date(nowDate.getFullYear(), month, 1) // Get the first day of the month
+	const firstDayOfMonth = new Date(year, month, 1) // Get the first day of the month
 	const monthStartDay = firstDayOfMonth.getDay() // Get the day of the week for the first day of the month
 
 	const gotoToday = () => {
@@ -36,7 +36,7 @@ const Calendar = () => {
 
 	const generateCalendar = () => {
 		const rows = []
-		const daysInMonth = new Date(nowDate.getFullYear(), month + 1, 0).getDate() // Calculate the total number of days in the current month
+		const daysInMonth = new Date(year, month + 1, 0).getDate() // Calculate the total number of days in the current month
 		const numWeeks = Math.ceil((daysInMonth + monthStartDay) / 7)
 
 		for (let i = 0; i < numWeeks; i++) {
