@@ -46,7 +46,7 @@ const Calendar = () => {
 				const isWithinMonth = dayOfMonth > 0 && dayOfMonth <= daysInMonth
 				cells.push(
 					<td
-						className='relative p-4 text-center text-4xl w-[calc(100%/7)] border h-[75px]'
+						className='relative p-4 border-black text-center text-4xl w-[calc(100%/7)] border h-[75px]'
 						key={j}
 					>
 						<span className='absolute text-sm right-2 top-2'>
@@ -85,7 +85,7 @@ const Calendar = () => {
 					{(month !== nowDate.getMonth() || year !== nowDate.getFullYear()) && (
 						<button
 							onClick={() => gotoToday()}
-							className='bg-green-600 absolute h-full px-4 right-0 rounded-xl font-normal text-sm'
+							className='bg-green-600 text-white absolute h-full px-4 right-0 rounded-xl font-normal text-sm'
 						>
 							Go to Today
 						</button>
@@ -109,7 +109,7 @@ const Calendar = () => {
 						<tr>
 							{daysOfWeek.map((day, index) => (
 								<th
-									className='font-bold text-2xl border'
+									className='font-bold text-2xl border border-black'
 									key={index}
 								>
 									{day}

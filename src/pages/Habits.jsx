@@ -82,7 +82,7 @@ const Habit = () => {
 							<div className='font-bold border border-gray-600 p-2'>Habits</div>
 							{daysOfWeek.map((day, index) => (
 								<div
-									className={`border border-gray-600 p-2 ${today === day ? 'bg-blue-300 bg-opacity-30' : ''}`}
+									className={`border border-gray-600 p-2 ${today === day ? 'bg-[#f4d444] bg-opacity-70' : ''}`}
 									key={index}
 								>
 									{day}
@@ -97,7 +97,7 @@ const Habit = () => {
 										<div
 											onClick={(event) => updateCheck(event, habit, colIndex)}
 											className={`border border-gray-500 p-2 flex justify-center cursor-default select-none ${
-												colIndex === nowDate.getDay() && 'bg-blue-300 bg-opacity-20 hover:cursor-pointer'
+												colIndex === nowDate.getDay() && 'bg-[#f4d444] bg-opacity-70 hover:cursor-pointer'
 											} `}
 											key={`${rowIndex}-${colIndex}`}
 										>
@@ -112,13 +112,13 @@ const Habit = () => {
 				<div className='flex gap-4'>
 					<button
 						onClick={() => setAddModalIsOpen(true)}
-						className='bg-green-600 font-bold px-8 py-4 rounded-lg'
+						className='bg-green-600 text-white font-bold px-8 py-4 rounded-lg'
 					>
 						Add a new habit
 					</button>
 					<button
 						onClick={() => setRemoveModalIsOpen(true)}
-						className='bg-red-600 font-bold px-8 py-4 rounded-lg'
+						className='bg-red-600 text-white font-bold px-8 py-4 rounded-lg'
 					>
 						Remove habit
 					</button>

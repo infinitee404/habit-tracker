@@ -5,11 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	--bg-primary: #232323;
-	--text-primary: #efefef;
-}
-
 *,
 *::before,
 *::after {
@@ -29,7 +24,8 @@ html {
 
 body {
 	min-height: 100vh;
-	color: var(--text-primary);
+	color: #1a4862;
+    background-color: #fbf0f4;
 }
 
 /* Media responsive */
@@ -56,7 +52,5 @@ p {
 }
 
 body {
-	/* background-color: var(--bg-primary); */
-	/* color: #232323; */
 	margin-inline: auto;
 }
